@@ -1,50 +1,33 @@
-let origText;
-let currText;
-let textfield;
-$w.onReady(function () {
-    textfield= $w('#yourText') //textfield where the text will be put
-    origText = textfield.text;  //The original text
-    currText = origText;    //The text currently being displayed
-    erase()
-    blink()
+
+let interval = [];
+
+// -------------- USER - INTERFACE --------------------
+let txtInput = [];
+    txtInput[0] = "Website Designer \n SEO Analyst"; 
+    txtInput[1] = "What the hell!!! Another text showing as Type-Writer-Effect???"; 
+    txtInput[2] = "Wow, it's amazing!!!"; 
+
+let DELAY = 500;
+let timeInterval = 50;
+let SYMBOL = "|"
+// -------------- USER - INTERFACE --------------------
+
+
+$w.onReady(async function() {
+    for (let i = 0; i < txtInput.length; i++) {const element = txtInput[i]; xxx(i);}
+
+    function xxx(value){
+        setTimeout(()=>{
+            let typeIdx = 0, displayStr = "", endingString = SYMBOL;
+            interval[value] = setInterval(() => {
+                displayStr = displayStr + txtInput[value][typeIdx]
+                typeIdx++
+
+                $w("#twInput"+value).text = displayStr + endingString
+
+                typeIdx === txtInput[value].length && clearInterval(interval[value]);
+            }, timeInterval)
+        },DELAY);
+        DELAY=DELAY+500;
+    }    
 });
-
-//Removes the last letter until nothing is left, then starts the write() function
-function erase() {
-    let intervalID = setInterval(function () {
-        currText = currText.slice(0, -1);
-        textfield.text = currText
-        if (currText.length == 0) {
-            setTimeout(function () { write() }, 300)
-            clearInterval(intervalID)
-        }
-    }, 400);
-
-}
-
-//Adds letters until all have been added, then starts erase()
-function write() {
-    let intervalID = setInterval(function () {
-        currText += origText.charAt(currText.length)
-        textfield.text=currText
-        if (currText.length == origText.length) {
-            setTimeout(function () { erase() }, 300)
-
-            clearInterval(intervalID)
-        }
-    }, 400);
-}
-
-//makes the vertical line blink
-function blink() {
-    const linje = $w('#blinkingLine');
-    setInterval(function () {
-        if (linje.hidden) {
-            linje.show()
-        } else {
-            linje.hide()
-        }
-
-    }, 600);
-
-}
